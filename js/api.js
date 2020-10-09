@@ -2,9 +2,9 @@ var base_url = "https://api.football-data.org/v2/";
 var api_key = "9620be29cf5342b7b0762abb3142c6d4"
 
 // Table UCL
-const ucl_id = 2001
+const ucl_id = 2019
 
-const competitionUcl = `${base_url}competitions/${ucl_id}/standings?standingType=TOTAL`
+const competitionUcl = `${base_url}competitions/${ucl_id}/standings`
 const clubList = `${base_url}competitions/${ucl_id}/teams`
 
 const fetchApi = url => {
@@ -51,50 +51,45 @@ function getAllStandings() {
 const showStanding = (data) => {
   let standings = "";
   let standingElement = document.getElementById("competitions");
-  for (let i = 0; i < 8; i++) {
-    data.standings[i].table.map(standing => {
-      standings += `
-          
-                <tr>
-                  <td>${standing.position}</td>
-                  <td><img src="${standing.team.crestUrl.replace(/^http:\/\//i, 'https://')}" width="30px" alt="badge"/>
-                  ${standing.team.name}</td>
-                  <td>${standing.playedGames}</td>
+  data.standings[0].table.forEach((standing) => {
+        standings += `
+                  <tr>
+                  <td>
+                      <img class="lazyload" src="${standing.team.crestUrl.replace(/^http:\/\//i, 'https://')}" width="30px" alt="badge"/>
+                  </td>
+                  <td>${standing.team.name}</td>
                   <td>${standing.won}</td>
                   <td>${standing.draw}</td>
                   <td>${standing.lost}</td>
+                  <td>${standing.points}</td>
                   <td>${standing.goalsFor}</td>
                   <td>${standing.goalsAgainst}</td>
                   <td>${standing.goalDifference}</td>
-                  <td>${standing.points}</td>
-                  <td>${standing.form}</td>
-                </tr>
-        `
-    })
-  }
-  standingElement.innerHTML = ` 
-    <div class="card">
+              </tr>`;
+
+  });
+
+  standingElement.innerHTML = `
+        <div class="card">
           <table class="striped responsive-table">
               <thead>
-                  <tr>
-                    <th>Pos</th>
-                    <th>Team</th>
-                    <th>P</th>
-                    <th>W</th>
-                    <th>D</th>
-                    <th>L</th>
-                    <th>F</th>
-                    <th>A</th>
-                    <th>+/-</th>
-                    <th>PTS</th>
-                    <th>Form</th>
-                  </tr>
+                <tr>
+                <th></th>
+                <th>Team Name</th>
+                <th>W</th>
+                <th>D</th>
+                <th>L</th>
+                <th>P</th>
+                <th>GF</th>
+                <th>GA</th>
+                <th>GD</th>
+                </tr>
               </thead>
               <tbody id="standings">
                   ${standings}
               </tbody>
             </table>
-      </div> 
+      </div>
       `
 }
 
